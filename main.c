@@ -17,6 +17,7 @@ THESE CHANGES ARE:
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <unistd.h>  /**This library is only for unix users (Mac or Linux) for windows users this library would have to be
                      replaced with the time.h library to use the sleep() function**/
 
@@ -24,12 +25,28 @@ THESE CHANGES ARE:
                      replaced with the conio.h library to use the getch() function**/
 //---------------------
 
+#define MIN -1		    //Set minium value in range
+#define MAX 1000000		//Set maxium value in range
+int count=0;
+
+//--- Declare Structures---
+struct patientInfo
+{
+    int patient_no;
+    int treatment_cost;
+    char insurance_name[25];
+    char address[70];
+    char name[80];
+    char treatment[50];
+}Patient[MAX];		           //Global Structure Array
+//------------------------------------------------
+
 //--- Function Proto-types-----
 void login();				//Login Function username: Admin password: P@$$w0rd (case sensitive)
 int displaymenu();		    //Display the menu
 void menu();				//Calls the respective function based on the option selected in the menu displayed
-/**void add();				//Allows the user to add patients into a structure array
-void search();              //ALlows the user to search for a patients based on patient number
+void add();				    //Allows the user to add patients into a structure array
+/**void search();           //ALlows the user to search for a patients based on patient number
 void display();	**/			//Displays all patient detals
 //---------------------------------------------------------------------------------------------------
 
@@ -45,6 +62,87 @@ int main()
 }
 //--------------------------------------------------------------------------------------------------
 
+void add(){
+    char op, answer, insurance;
+    int x;
+    static int i=MIN; //Static variable 'i' will remember where it stop counting to prevent the data from being overwritten
+    i++;
+    for(i;i<=MAX;i++){ //MAX value = 1000000
+        printf("\n\nEnter data for record #%d\n", i + 1);
+
+        printf("\nEnter Patient Number :");
+		scanf("%d", &Patient[i].patient_no);
+		fflush(stdin);
+
+        printf("\nEnter Patient Full Name : ");
+        scanf(" %[^\n]%*c", Patient[i].name);
+
+        printf("\nEnter the Patient's Address : ");
+        scanf(" %[^\n]%*c", Patient[i].address);
+
+        printf("\nEnter the treatment the patient recieved : ");
+        scanf(" %[^\n]%*c", Patient[i].treatment);
+
+        printf("\nEnter the cost for treatment : ");
+        scanf("%d", &Patient[i].treatment_cost);
+
+        printf("\nDo you have insurance, y or n? ");
+        scanf(" %c",&answer);
+        answer=tolower(answer);
+
+        if (answer == 'y')
+        {
+            while(1){
+                printf("\nWhich of these insurance to you belong to?\n");
+                printf("Select the letter that corresponds with your Insurance\n");
+                printf("a. Guardian Life\n");
+                printf("b. Victoria Mutual\n");
+                printf("c. Life Time Insurance\n");
+                printf("> ");
+                scanf(" %c",&insurance);
+                insurance=tolower(insurance);
+
+                if(insurance=='a'){
+                    strcpy(Patient[i].insurance_name, "Guardian Life");
+                    Patient[i].treatment_cost = (Patient[i].treatment_cost - (Patient[i].treatment_cost * 0.15));
+                    break;
+
+                }else if(insurance=='b'){
+                    strcpy(Patient[i].insurance_name, "Victoria Mutual");
+                    Patient[i].treatment_cost = (Patient[i].treatment_cost - (Patient[i].treatment_cost * 0.20));
+                    break;
+
+                }else if(insurance=='c'){
+                    strcpy(Patient[i].insurance_name, "Life Time Insurance");
+                    Patient[i].treatment_cost = (Patient[i].treatment_cost - (Patient[i].treatment_cost * 0.16));
+                    break;
+                }
+                else{
+                    printf("\a \t \t|    Invaild Option Selection, Try Again    |\n");
+                }
+            }
+            printf("\nThe final cost for treatment is %d", Patient[i].treatment_cost);
+        }else{
+            strcpy(Patient[i].insurance_name, "NONE");
+            printf("\nThe final cost for treatment is %d", Patient[i].treatment_cost);
+        }
+
+        printf("\n\n\t     Press 'y' to Add more records or \'n\' to stop\n\n");
+        printf("> ");
+		scanf(" %c",&op);
+		op=tolower(op);
+		count++;											   //Makes users input in "op" lowercased
+		if (op=='n')
+		{
+			printf("\t\t\t   Total Records added: %d\n\n",i+1);		   //Displays the total number of records added to the text file
+			getchar();
+			break;													   //Ends loop
+		}
+    }
+    system("clear");        //Clear Screen
+	menu(displaymenu());
+}
+
 //---------------------- MENU FUNCTION ---------------------------
 void menu(int x)									//Function accepts an integer value of "choice" from the main function
 {
@@ -56,7 +154,7 @@ void menu(int x)									//Function accepts an integer value of "choice" from th
 			puts("\n \t \t  |=======================================|");
 			puts("\t \t  |\t         ADD PATIENT     \t  |");
 			puts("\t \t--|=======================================|--");
-			//add();								//Add function called to add records Patient structure
+			add();								//Add function called to add records Patient structure
             break;									//Ends this instance of the program
         }
 
@@ -72,11 +170,19 @@ void menu(int x)									//Function accepts an integer value of "choice" from th
 
         case 3:                                     //Executes the following block of code if the integer value x is 3
         {
-            system("clear");						//Clears the screen
+            system("clear");        //Clears the screen
+            int d;
 			puts("\n \t \t  |=======================================|");
 			puts("\t \t  |\t       PATIENT DETAILS \t\t  |");
 			puts("\t \t--|=======================================|--");
-			//display();							//Display all patient details
+            for(d=0;d<count;d++){
+                printf("\nPatient Number: %d\n", Patient[d].patient_no);
+                printf("Name: %s\n", Patient[d].name);
+                printf("Address: %s\n", Patient[d].address);
+                printf("Treatmet: %s\n", Patient[d].treatment);
+                printf("Insurance Name: %s\n", Patient[d].insurance_name);
+                printf("Treatment Cost: %d\n", Patient[d].treatment_cost);
+            }
             break;									//Ends this instance of the program
         }
 
