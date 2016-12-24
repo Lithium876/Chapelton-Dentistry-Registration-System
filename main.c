@@ -1,3 +1,18 @@
+/**
+THIS CODE IS DESIGNED TO RUN ON UNIX SYSTEMS (MAC OR LINUX)
+IF YOU ARE USING WINDOWS TO COMPLIE THIS CODE, YOU'LL NEED TO MAKE A COUPLE CANGES.
+
+THESE CHANGES ARE:
+1. REPLACE <unistd.h> WITH <time.h>
+2. REPLACE <termios.h> WITH <conio.h>
+3. REMOVE THE GETCH FUNCTION FROM THE CODE (IT IS INDECATED IN THE CODE AS "GETCH FUNCTION")
+4. REPLACE ALL INSTANCES OF sleep() WITH Sleep()
+5. IN THE SLEEP FUNCTION, THE DIGIT WHICH INDICATES THE NUMBER OF SECONDS TO PAUSE FOR SHOULD BE IN MILLISECONDS.
+   I.E. 1 SECOND = 1000 MILLISECONDS
+7. ALL INSTANCES OF "clear" SHOULD BE REPLACED WITH "cls"
+8. SEE COMMENTS FOR MORE CHANGES.. (LOGIN FUNCTION)
+**/
+
 //--- Header Files ----
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,8 +27,8 @@
 //--- Function Proto-types-----
 void login();				//Login Function username: Admin password: P@$$w0rd (case sensitive)
 int displaymenu();		    //Display the menu
-/**void menu();				//Calls the respective function based on the option selected in the menu displayed
-void add();					//Allows the user to add patients into a structure array
+void menu();				//Calls the respective function based on the option selected in the menu displayed
+/**void add();				//Allows the user to add patients into a structure array
 void search();              //ALlows the user to search for a patients based on patient number
 void display();	**/			//Displays all patient detals
 //---------------------------------------------------------------------------------------------------
@@ -22,13 +37,68 @@ void display();	**/			//Displays all patient detals
 int main()
 {
     int choice;
-    login();                //Calling the login function
+   // login();                //Calling the login function
     choice=displaymenu();   //Calling the display menu function and storing the return valued the the variable "choice"
-    //menu(choice);			//Calling the "choice" option function from the menu function
-	//getch();				//Holds the information on the screen until a key is pressed
+    menu(choice);			//Calling the "choice" option function from the menu function
+	getch();				//Holds the information on the screen until a key is pressed
     return 0;
 }
 //--------------------------------------------------------------------------------------------------
+
+//---------------------- MENU FUNCTION ---------------------------
+void menu(int x)									//Function accepts an integer value of "choice" from the main function
+{
+    switch(x)
+    {
+        case 1:                                     //Executes the following block of code if the integer value x is 1
+        {
+			system("clear");						//Clears the screen
+			puts("\n \t \t  |=======================================|");
+			puts("\t \t  |\t         ADD PATIENT     \t  |");
+			puts("\t \t--|=======================================|--");
+			//add();								//Add function called to add records Patient structure
+            break;									//Ends this instance of the program
+        }
+
+        case 2:										//Executes the following block of code if the integer value x is 2
+        {
+			system("clear");						//Clears the screen
+			puts("\n \t \t  |=======================================|");
+			puts("\t \t  |\t       LOOK UP PATIENT    \t  |");
+			puts("\t \t--|=======================================|--");
+			//search();								//ALlows the user to search for a patients based on patient number
+            break;									//Ends this instance of the program
+        }
+
+        case 3:                                     //Executes the following block of code if the integer value x is 3
+        {
+            system("clear");						//Clears the screen
+			puts("\n \t \t  |=======================================|");
+			puts("\t \t  |\t       PATIENT DETAILS \t\t  |");
+			puts("\t \t--|=======================================|--");
+			//display();							//Display all patient details
+            break;									//Ends this instance of the program
+        }
+
+        case 4:                                     //Executes the following block of code if the integer value x is 4
+        {
+			printf("\t\t\t\tLogin Out...\n");       //Message to user
+			sleep(2);							    //Pause program for 2 seconds
+            exit(0);								//Close program
+            break;									//Ends this instance of the program
+        }
+        default:                                    //Executes the following block of code if the integer value x is not any of the instances above
+            {
+                printf("\a \t \t|    Invaild Option Selection, Try Again    |\n");
+                puts("\t \t|-------------------------------------------|");
+                sleep(1);                         //Pause program for 1 second
+                system("clear");			     //Clears Screen
+                menu(displaymenu());		    //Calls the menu function using the return value from the displaymenu function as arugment
+                break;						   //Ends this instance of the program
+            }
+    }
+}
+//-------------------------------------------------------------------------------------
 
 //---------------- DISPLAY MENU FUNCTION -----------------
 int displaymenu()
@@ -117,7 +187,6 @@ void login()
     }
 }
 //-----------------------------------------------------------------------------------------
-
 
 //------------------- GETCH FUNCTION -----------------------------
 /**BECAUSE UNIX SYSTEMS DON'T SUPPORT THE CONIO.H LIBRARY THAT CONTAINS IT'S OWN BUILT IN GETCH() FUNCTION
