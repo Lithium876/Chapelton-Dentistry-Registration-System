@@ -11,8 +11,8 @@
 
 //--- Function Proto-types-----
 void login();				//Login Function username: Admin password: P@$$w0rd (case sensitive)
-/**int displaymenu();		//Display the menu
-void menu();				//Calls the respective function based on the option selected in the menu displayed
+int displaymenu();		    //Display the menu
+/**void menu();				//Calls the respective function based on the option selected in the menu displayed
 void add();					//Allows the user to add patients into a structure array
 void search();              //ALlows the user to search for a patients based on patient number
 void display();	**/			//Displays all patient detals
@@ -23,12 +23,33 @@ int main()
 {
     int choice;
     login();                //Calling the login function
-    //choice=displaymenu();   //Calling the display menu function and storing the return valued the the variable "choice"
+    choice=displaymenu();   //Calling the display menu function and storing the return valued the the variable "choice"
     //menu(choice);			//Calling the "choice" option function from the menu function
 	//getch();				//Holds the information on the screen until a key is pressed
     return 0;
 }
 //--------------------------------------------------------------------------------------------------
+
+//---------------- DISPLAY MENU FUNCTION -----------------
+int displaymenu()
+{
+    int option;
+    puts("\n \t \t  |=======================================|");
+    puts("\t \t  | \t           MAIN MENU \t \t  |");
+    puts("\t \t--|=======================================|--");
+    printf("\t \t|  Select the number that corresponds with  |\n \t \t|\t \t your option.\t \t    |\n");
+    puts("\t \t|-------------------------------------------|");
+    printf("\t \t|\t  1. Add Patient \t\t    |\n");
+    printf("\t \t|\t  2. Look up Patient \t \t    |\n");
+    printf("\t \t|\t  3. Display Patient Details\t    |\n");
+    printf("\t \t|\t  4. Exit\t \t \t    |\n");
+    puts("\t \t|-------------------------------------------|");
+    printf("\t \t| Option: ");
+    scanf("%d",&option);
+    puts("\t \t|-------------------------------------------|");
+    return option;  //Returns the number the user chooses and stores it in the "choice" variable in the main function
+}
+//--------------------------------------------------------------------------------------
 
 //------------------- LOGIN FUNCTION -----------------------------
 void login()
