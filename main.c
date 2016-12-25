@@ -160,11 +160,41 @@ void menu(int x)									//Function accepts an integer value of "choice" from th
 
         case 2:										//Executes the following block of code if the integer value x is 2
         {
-			system("clear");						//Clears the screen
+			system("clear");            //Clears the screen
+			int j, number,l;
+			l=0;
 			puts("\n \t \t  |=======================================|");
 			puts("\t \t  |\t       LOOK UP PATIENT    \t  |");
 			puts("\t \t--|=======================================|--");
-			//search();								//ALlows the user to search for a patients based on patient number
+
+            if(count==0){
+                printf("No records Added yet!");
+            }
+            else{
+                printf("Enter Patient Number: ");
+                scanf("%d",&number);
+                for(j=0;j<count;j++)									//Makes sure x is less than the current array posstion
+                    {
+                        if(Patient[j].patient_no==number)		//Checks structure array if case number entered already exists
+                        {
+                            printf("\nPatient Number: %d\n", Patient[j].patient_no);
+                            printf("Name: %s\n", Patient[j].name);
+                            printf("Address: %s\n", Patient[j].address);
+                            printf("Treatmet: %s\n", Patient[j].treatment);
+                            printf("Insurance Name: %s\n", Patient[j].insurance_name);
+                            printf("Treatment Cost: %d\n", Patient[j].treatment_cost);
+                            l++;
+                        }
+                    }
+                    if(l==0){
+                    printf("No match for patient number %d was found!", number);
+                    }
+				}
+
+            getchar();
+            getchar();
+            system("clear");                        //Clear Screen
+            menu(displaymenu());
             break;									//Ends this instance of the program
         }
 
@@ -175,14 +205,23 @@ void menu(int x)									//Function accepts an integer value of "choice" from th
 			puts("\n \t \t  |=======================================|");
 			puts("\t \t  |\t       PATIENT DETAILS \t\t  |");
 			puts("\t \t--|=======================================|--");
-            for(d=0;d<count;d++){
-                printf("\nPatient Number: %d\n", Patient[d].patient_no);
-                printf("Name: %s\n", Patient[d].name);
-                printf("Address: %s\n", Patient[d].address);
-                printf("Treatmet: %s\n", Patient[d].treatment);
-                printf("Insurance Name: %s\n", Patient[d].insurance_name);
-                printf("Treatment Cost: %d\n", Patient[d].treatment_cost);
+			if(count==0){
+                printf("No records Added yet!");
             }
+            else{
+                for(d=0;d<count;d++){
+                    printf("\nPatient Number: %d\n", Patient[d].patient_no);
+                    printf("Name: %s\n", Patient[d].name);
+                    printf("Address: %s\n", Patient[d].address);
+                    printf("Treatmet: %s\n", Patient[d].treatment);
+                    printf("Insurance Name: %s\n", Patient[d].insurance_name);
+                    printf("Treatment Cost: %d\n", Patient[d].treatment_cost);
+                }
+            }
+            getchar();
+            getchar();
+            system("clear");
+            menu(displaymenu());
             break;									//Ends this instance of the program
         }
 
